@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Админ панель</title>
+    <link rel="icon" href="/images/Icon.ico">
+    <style>
+        body { font-family: Times New Roman; background: #FFFFFF; margin: 0; padding: 20px; }
+        .logo { width: 100px; margin-bottom: 20px; }
+        .user { position: absolute; top: 10px; right: 10px; }
+        .button { background: #00FA9A; border: none; padding: 10px 20px; margin: 5px; }
+        .form-group { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <img src="/images/Icon.png" alt="Логотип" class="logo">
+    <h1>Админ панель</h1>
+    <div class="user">Пользователь: <%= user.full_name %></div>
+    <a href="/catalog"><button class="button">Каталог</button></a>
+    <a href="/logout"><button class="button">Выход</button></a>
+    <div class="form-group">
+        <button class="button">Добавить книгу</button>
+        <button class="button">Редактировать книгу</button>
+        <button class="button">Удалить книгу</button>
+        <button class="button">Добавить пользователя</button>
+        <button class="button">Редактировать пользователя</button>
+        <button class="button">Удалить пользователя</button>
+    </div>
+</body>
+</html>

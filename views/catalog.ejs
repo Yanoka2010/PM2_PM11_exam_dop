@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Каталог книг</title>
+    <link rel="icon" href="/images/Icon.ico">
+    <style>
+        body { font-family: Times New Roman; background: #FFFFFF; margin: 0; padding: 20px; }
+        .logo { width: 100px; margin-bottom: 20px; }
+        .book { margin: 20px 0; padding: 10px; border: 1px solid #000; background: #7FFF00; }
+        .low-stock { background: #ADD8E6; }
+        .on-sale { background: #2E8B57; }
+        .price { color: #000000; }
+        .price-on-sale { color: #FF0000; text-decoration: line-through; }
+        .discount { color: #000000; margin-left: 10px; }
+        .user { position: absolute; top: 10px; right: 10px; }
+        .button { background: #00FA9A; border: none; padding: 10px 20px; margin: 5px; }
+        .form-group { margin: 10px 0; }
+        .input { padding: 5px; margin-right: 10px; }
+    </style>
+</head>
+<body>
+    <img src="/images/Icon.png" alt="Логотип" class="logo">
+    <h1>Каталог книг</h1>
+    <div class="user">Пользователь: <%= user.full_name %></div>
+    <a href="/logout"><button class="button">Выход</button></a>
+
+    <% if (user.role === 'guest') { %>
+    <% } else if (user.role === 'Client') { %>
+        <form method="GET" action="/catalog" class="form-group">
+            <label>Поиск: <input type="text" name="search" class="input"></label>
+            <button type="submit" class="button">Искать</button>
+        </form>
+    <% } else if (user.role === 'Manager' || user.role === 'Administrator') { %>
+        <form method="GET" action="/catalog" class="form-group">
+            <label>Поиск: <input type="text" name="search" class="input"></label>
+            <label>Жанр: <input type="text" name="genre" class="input"></label>
+            <label>Год от: <input type="number" name="year_min" class="input"></label>
+            <label>Год до: <input type="number" name="year_max" class="input"></label>
+            <label>Цена от: <input type="number" name="price_min" class="input"></label>
+            <label>Цена до: <input type="number" name="price_max" class="input"></label>
+            <label>Сортировка: <select name="sort" class="input"><option value="title">По названию</option><option value="price">По цене</option></select></label>
+            <button type="submit" class="button">Фильтровать</button>
+        </form>
+    <% } %>
+
+    <% if (user.role === 'Manager' || user.role === 'Administrator') { %>
+        <a href="/orders"><button class="button">Просмотр заказов</button></a>
+    <% } %>
+
+    <% if (user.role === 'Administrator') { %>
+        <a href="/admin"><button class="button">Управление</button></a>
+    <% } %>
+
+    <% books.forEach(book => { %>
+        <div class="book <%= book.stock === 0 ? 'low-stock' : (book.is_on_sale && book.discount_price && (book.price - book.discount_price) / book.price * 100 > 15 ? 'on-sale' : '') %>">
+            <img src="/images/<%= book.cover_path || 'picture.png' %>" width="100" alt="Обложка"><br>
+            <%= book.title %> | <%= book.author_name %><br>
+            Жанр: <%= book.genre_name %><br>
+            Издательство: <%= book.publisher_name %><br>
+            Год: <%= book.year %><br>
+            <% if (book.is_on_sale && book.discount_price) { %>
+                Цена: <span class="price-on-sale"><%= book.price %> руб.</span>
+                <span class="discount"><%= book.discount_price %> руб.</span><br>
+            <% } else { %>
+                Цена: <span class="price"><%= book.price %> руб.</span><br>
+            <% } %>
+            Количество: <%= book.stock %>
+        </div>
+    <% }); %>
+</body>
+</html>
